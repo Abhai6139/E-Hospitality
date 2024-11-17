@@ -1,0 +1,37 @@
+<!-- templates/newapp/view_medical_history.html -->
+{% extends 'index.html' %}
+
+{% block content %}
+<div class="container">
+    <h2>Medical History</h2>
+
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>Doctor</th>
+                <th>Diagnosis</th>
+                <th>Treatment</th>
+                <th>Description</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for record in medical_history %}
+            <tr>
+                <td>{{ record.date }}</td>
+                <td>{% if record.doctor %} Dr. {{ record.doctor.username }} {% else %} - {% endif %}</td>
+                <td>{{ record.diagnosis }}</td>
+                <td>{{ record.treatment }}</td>
+                <td>{{ record.description }}</td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="5">No medical history records found.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{% url 'patient_dashboard' %}" class="btn btn-secondary">Back to Dashboard</a>
+</div>
+{% endblock %}

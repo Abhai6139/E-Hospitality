@@ -1,0 +1,62 @@
+{% extends 'index.html' %}
+
+{% block content %}
+    <div class="container">
+        <h3 class="text-center">Scheduled Appointments</h3>
+        {% if messages %}
+    <div id="messages">
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+        {% endfor %}
+    </div>
+    <script>
+        // Auto-hide messages after 5 seconds
+        setTimeout(function() {
+            const messageDiv = document.getElementById('messages');
+            if (messageDiv) {
+                messageDiv.style.display = 'none';
+            }
+        }, 3000);
+    </script>
+{% endif %}
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Patient Name</th>
+                    <th>Timeslot</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for appointment in appointments %}
+                <tr>
+                    <td>{{ appointment.patient.username }}</td>
+                    <td>{{ appointment.timeslot.date }} {{ appointment.timeslot.start_time }} - {{ appointment.timeslot.end_time }}</td>
+                    <td>{{ appointment.get_status_display }}</td>
+                    <td>
+                        <a href="{% url 'view_patient_profile' appointment.id %}" class="btn btn-info btn-sm">View Profile</a>
+                        {% if appointment.status != 'canceled' %}
+                            <a href="{% url 'cancel_appointment_by_doctor' appointment.id %}" class="btn btn-danger btn-sm">Cancel</a>
+                        {% else %}
+                            Canceled
+                        {% endif %}
+
+                        {% if appointment.status != 'viewed' %}
+                        <form method="post" action="{% url 'mark_as_viewed' appointment.id %}">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-primary">Viewed</button>
+                        </form>
+                        {% else %}
+                        <button class="btn btn-success" disabled>Viewed</button>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% empty %}
+                <tr><td colspan="4">No appointments scheduled.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <a href="{% url 'doctor_dashboard' %}" class="btn btn-secondary">Back to Dashboard</a>
+    </div>
+   {% endblock %}

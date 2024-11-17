@@ -1,0 +1,50 @@
+{% extends 'index.html' %}
+
+{% block content %}
+<div class="container">
+    <h2>Your Billing Statements</h2>
+    {% if messages %}
+    <div id="messages">
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+        {% endfor %}
+    </div>
+    <script>
+        // Auto-hide messages after 5 seconds
+        setTimeout(function() {
+            const messageDiv = document.getElementById('messages');
+            if (messageDiv) {
+                messageDiv.style.display = 'none';
+            }
+        }, 3000);
+    </script>
+{% endif %}
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Description</th>
+            <th>Amount</th>
+            <th>Status</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for statement in billing_statements %}
+        <tr>
+            <td>{{ statement.description }}</td>
+            <td>{{ statement.amount }}</td>
+            <td>
+                {% if statement.is_paid %}
+                    Paid
+                {% else %}
+                <a href="{% url 'make_payment' statement.id %}" class="btn btn-success btn-sm">Make Payment</a>
+                {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+<a href="{% url 'view_insurance_info' %}" class="btn btn-primary">View Insurance Details</a><a href="{% url 'patient_dashboard' %}" class="btn btn-secondary">Back to Dashboard</a>
+</div>
+{% endblock %}
+
+

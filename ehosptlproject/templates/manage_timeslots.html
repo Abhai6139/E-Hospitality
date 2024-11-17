@@ -1,0 +1,48 @@
+{% extends 'index.html' %}
+
+{% block content %}
+    <div class="container">
+    <h2>Manage Timeslots</h2>
+    {% if messages %}
+    <div id="messages">
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+        {% endfor %}
+    </div>
+    <script>
+        // Auto-hide messages after 5 seconds
+        setTimeout(function() {
+            const messageDiv = document.getElementById('messages');
+            if (messageDiv) {
+                messageDiv.style.display = 'none';
+            }
+        }, 3000);
+    </script>
+{% endif %}
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-primary">Add Timeslot</button>
+    </form>
+    <h3>Your Timeslots</h3>
+    <table class="table table-bordered">
+        <thead>
+            <tr><th>Date</th><th>Start Time</th><th>End Time</th><th>Available</th></tr>
+        </thead>
+        <tbody>
+            {% for timeslot in timeslots %}
+            <tr>
+                <td>{{ timeslot.date }}</td>
+                <td>{{ timeslot.start_time }}</td>
+                <td>{{ timeslot.end_time }}</td>
+                <td>{{ timeslot.is_available }}</td>
+            </tr>
+            {% empty %}
+            <tr><td colspan="4">No timeslots available.</td></tr>
+            {% endfor %}
+            
+        </tbody>
+    </table>
+    <a href="{% url 'doctor_dashboard' %}" class="btn btn-secondary">Back to Dashboard</a>
+</div>
+{% endblock %}

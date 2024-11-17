@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Registered Patients</title>
+        <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    </head>
+    <body>
+        <div class="container">
+        <!-- List of Registered Doctors -->
+    <h3>Registered Doctors</h3>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Username</th>
+                <th>Reg.No</th>
+                <th>Specialization</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for doctor in doctors %}
+            <tr>
+                <td>{{ doctor.username }}</td>
+                <td>{{ doctor.doctor.registration_number }}</td>
+                <td>{{ doctor.doctor.specialization }}</td>
+                <td>
+                    <button onclick="location.href='/dashboard/doctor/schedule/'">Schedule</button>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="5">No doctors registered.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+ </div>
+</body>
+</html>
+    </body>
+</html>

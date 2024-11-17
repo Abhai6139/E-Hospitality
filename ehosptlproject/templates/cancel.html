@@ -1,0 +1,25 @@
+{% extends 'index.html' %}
+
+{% block content %}
+<div class="container">
+    <h2>Payment Canceled</h2>
+    {% if messages %}
+    <div id="messages">
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+        {% endfor %}
+    </div>
+    <script>
+        // Auto-hide messages after 5 seconds
+        setTimeout(function() {
+            const messageDiv = document.getElementById('messages');
+            if (messageDiv) {
+                messageDiv.style.display = 'none';
+            }
+        }, 3000);
+    </script>
+{% endif %}
+    <p>Your payment was canceled. Please try again.</p>
+    <a href="{% url 'view_billing_statements' %}" class="btn btn-secondary">Back to Billing</a>
+</div>
+{% endblock %}

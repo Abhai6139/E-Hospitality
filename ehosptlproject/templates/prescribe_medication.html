@@ -1,0 +1,51 @@
+{% extends 'index.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Prescribe Medication for {{ patient.username }}</h2>
+<!-- templates/prescribe_medication.html -->
+
+<form method="post" novalidate>
+    {% csrf_token %}
+    <h2>Prescription Details</h2>
+    {{ prescription_form.as_p }}
+
+    <h3>Medications</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>Medication Name</th>
+                <th>Dosage</th>
+                <th>Frequency</th>
+                <th>Instructions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{ medication_formset.management_form }}
+            {% for form in medication_formset %}
+                <tr>
+                    <td>{{ form.medication_name }}</td>
+                    <td>{{ form.dosage }}</td>
+                    <td>{{ form.frequency }}</td>
+                    <td>{{ form.instructions }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <button type="button" onclick="addMedicationRow()">Add Another Medication</button>
+    <a type="submit" href="{% url 'view_prescriptions' patient.id %}">Save Prescription</a>
+</form>
+
+<script>
+    function addMedicationRow() {
+        const tbody = document.querySelector('tbody');
+        const newRow = tbody.children[0].cloneNode(true);
+        tbody.appendChild(newRow);
+    }
+</script>
+
+
+
+</div>
+{% endblock %}

@@ -1,0 +1,82 @@
+{% extends 'index.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Prescriptions for {{ patient_name }}</h2>
+    {% if messages %}
+    <div id="messages">
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+        {% endfor %}
+    </div>
+    <script>
+        // Auto-hide messages after 5 seconds
+        setTimeout(function() {
+            const messageDiv = document.getElementById('messages');
+            if (messageDiv) {
+                messageDiv.style.display = 'none';
+            }
+        }, 3000);
+    </script>
+{% endif %}
+
+    <p>Name: {{ patient_name }}</p>
+    <p>Date: {{ prescription_date }}</p>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Medication</th>
+                <th>Dosage</th>
+                <th>Frequency</th>
+                <th>Instructions</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for prescription in prescriptions_with_medications %}
+                {% for medication in prescription.medications.all %}
+                <tr>
+                    <td>{{ medication.name }}</td>
+                    <td>{{ medication.dosage }}</td>
+                    <td>{{ medication.frequency }}</td>
+                    <td>{{ medication.instructions }}</td>
+                    <td>
+                        <a href="{% url 'delete_medication' patient_id=patient_id medication_id=medication.id %}" class="btn btn-danger btn-sm">Delete</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <!-- Form to Add Medication -->
+    <h3>Add Medication</h3>
+    <form method="POST" action="{% url 'add_medication' patient_id=patient_id %}">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="medication_name">Medication Name</label>
+            <input type="text" name="medication_name" class="form-control" required>
+        </div>
+        <div class="form-group">
+            <label for="dosage">Dosage</label>
+            <input type="text" name="dosage" class="form-control" required>
+        </div>
+        <div class="form-group">
+            <label for="frequency">Frequency</label>
+            <input type="text" name="frequency" class="form-control" required>
+        </div>
+        <div class="form-group">
+            <label for="instructions">Instructions</label>
+            <textarea name="instructions" class="form-control"></textarea>
+        </div>
+        <button type="submit" class="btn btn-success mt-2">Add Medication</button>
+    </form>
+
+    <!-- Button to Send Prescription to Pharmacy -->
+    <form method="POST" action="{% url 'send_to_pharmacy' patient_id=patient_id %}">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-primary mt-3">Send Prescription to Pharmacy</button>
+    </form>
+</div>
+{% endblock %}

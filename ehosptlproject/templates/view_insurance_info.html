@@ -1,0 +1,20 @@
+{% extends 'index.html' %}
+
+{% block content %}
+    <div class="container mt-5">
+        <h2>Insurance Information</h2>
+
+        {% if insurance %}
+            <!-- Display insurance details if available -->
+            <p><strong>Policy Number:</strong> {{ insurance.policy_number }}</p>
+            <p><strong>Provider Name:</strong> {{ insurance.provider_name }}</p>
+            <p><strong>Coverage Details:</strong> {{ insurance.coverage_details }}</p>
+        {% else %}
+            <!-- Display message if no insurance information is available -->
+            <p class="text-danger">No insurance information is available for your profile.</p>
+            <a href="{% url 'add_insurance_info' %}" class="btn btn-primary mt-3">Add Insurance Information</a>
+        {% endif %}
+
+        <a href="{% url 'patient_dashboard' %}" class="btn btn-secondary mt-3">Back to Dashboard</a>
+    </div>
+{% endblock %}
